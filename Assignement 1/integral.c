@@ -1,8 +1,8 @@
 /*
 ============================================================================
 Filename    : integral.c
-Author      : Your names goes here
-SCIPER		: Your SCIPER numbers
+Author      : Samuel Cahssot and Simon Wicky
+SCIPER		: 270955 and 260589
 ============================================================================
 */
 
@@ -41,8 +41,21 @@ int main (int argc, const char *argv[]) {
 
 double integrate (int num_threads, int samples, int a, int b, double (*f)(double)) {
     double integral;
+    omp_set_num_threads(num_threads);
+    rand_gen rand = init_rand();
+    double sum = 0;
+    int width = b - a;
 
-    /* Your code goes here */
+    #pragma omp parallel for
+    for (size_t i = 0; i < samples; ++i) {
+        double x = next_rand(rand);
+        double y = (*f)(x);
+        #pragma omp atomic
+        sum += y * width;
+    }
+
+    integral = sum / samples;
+    
 
     return integral;
 }
