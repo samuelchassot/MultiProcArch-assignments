@@ -35,14 +35,17 @@ int main (int argc, const char *argv[]) {
 
 
 double calculate_pi (int num_threads, int samples) {
+    omp_set_num_threads(num_threads);
     double pi;
     double nb_points = 0;
     rand_gen rand = init_rand();
 
+    #pragma omp parallel for
     for (size_t i = 0; i < samples; ++i) {
         double x = next_rand(rand);
         double y = next_rand(rand);
         if (x*x + y*y <= 1){
+            #pragma omp atomic
             nb_points += 1;
         }
     }
