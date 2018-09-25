@@ -1,8 +1,8 @@
 /*
 ============================================================================
 Filename    : pi.c
-Author      : Your names goes here
-SCIPER		: Your SCIPER numbers
+Author      : Samuel Chassot and Simon Wicky
+SCIPER		: 270955 and 260589
 ============================================================================
 */
 
@@ -36,8 +36,18 @@ int main (int argc, const char *argv[]) {
 
 double calculate_pi (int num_threads, int samples) {
     double pi;
+    double nb_points = 0;
+    rand_gen rand = init_rand();
 
-    /* Your code goes here */
+    for (size_t i = 0; i < samples; ++i) {
+        double x = next_rand(rand);
+        double y = next_rand(rand);
+        if (x*x + y*y <= 1){
+            nb_points += 1;
+        }
+    }
+
+    pi = (4 * nb_points) / samples;
 
     return pi;
 }
