@@ -1,6 +1,4 @@
 *
-!*.c
-!*.h
-!*.pdf
-!.gitignore
-!*.md
+!*.*
+*.o
+.DS_store
