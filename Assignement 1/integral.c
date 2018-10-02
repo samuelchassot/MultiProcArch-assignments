@@ -46,12 +46,12 @@ double integrate (int num_threads, int samples, int a, int b, double (*f)(double
     double sum = 0;
     int width = b - a;
 
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (size_t i = 0; i < samples; ++i) {
         double x = next_rand(rand);
         x = width * x + a;
         double y = (*f)(x);
-        //#pragma omp atomic
+        #pragma omp atomic
         sum += y * width;
     }
 
