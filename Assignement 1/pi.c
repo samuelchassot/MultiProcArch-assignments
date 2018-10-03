@@ -38,10 +38,10 @@ double calculate_pi (int num_threads, int samples) {
     omp_set_num_threads(num_threads);
     double pi;
     double nb_points = 0;
-    rand_gen rand = init_rand();
     double* result[num_threads];
+    rand_gen rand = init_rand();
 
-    #pragma omp parallel 
+    #pragma omp parallel private(rand)
     {
         result[omp_get_thread_num()] = calloc(1, sizeof(double));
     }
