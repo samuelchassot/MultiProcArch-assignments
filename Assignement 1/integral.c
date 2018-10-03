@@ -44,15 +44,24 @@ double integrate (int num_threads, int samples, int a, int b, double (*f)(double
     omp_set_num_threads(num_threads);
     rand_gen rand = init_rand();
     double sum = 0;
+    double* result[num_threads];
     int width = b - a;
 
-    //#pragma omp parallel for
+    #pragma omp parallel 
+    {
+        result[omp_get_thread_num()] = calloc(1, sizeof(double));
+    }
+
+    #pragma omp parallel for
     for (size_t i = 0; i < samples; ++i) {
         double x = next_rand(rand);
         x = width * x + a;
         double y = (*f)(x);
-        //#pragma omp atomic
-        sum += y * width;
+        *result[omp_get_thread_num()] += y * width;
+    }
+
+    for (size_t i = 0; i < num_threads; ++i) {
+        sum += *result[i];
     }
 
     integral = sum / samples;
