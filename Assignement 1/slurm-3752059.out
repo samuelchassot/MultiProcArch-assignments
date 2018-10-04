@@ -1,7 +1,0 @@
-STARTING AT date
-- Using 1 threads: pi = 3.14187056 computed in 2.491s.
-- Using 2 threads: pi = 3.13926728 computed in 3.185s.
-- Using 4 threads: pi = 3.14137712 computed in 3.428s.
-- Using 8 threads: pi = 3.14127556 computed in 3.327s.
-- Using 16 threads: pi = 3.14082068 computed in 2.717s.
-FINISHED AT date
