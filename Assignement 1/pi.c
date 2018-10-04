@@ -44,7 +44,7 @@ double calculate_pi (int num_threads, int samples) {
     #pragma omp parallel
     {
         result[omp_get_thread_num()] = calloc(1, sizeof(double));
-	rand[omp_get_thread_num()] = init_rand();
+	   rand[omp_get_thread_num()] = init_rand();
     }
     
 
