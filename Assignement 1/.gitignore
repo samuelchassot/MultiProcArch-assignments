@@ -1,5 +1,5 @@
-*
-!*.*
-*.o
 .DS_store
-test.c
+function.o
+integral
+pi
+Makefile
