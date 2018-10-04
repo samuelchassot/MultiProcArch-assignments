@@ -101,3 +101,5 @@ STARTING AT jeu oct 4 08:59:42 CEST 2018
 - Using 2 threads: pi = 3.14195592 computed in 1.065s.
 - Using 2 threads: pi = 3.14195592 computed in 1.069s.
 FINISHED AT jeu oct 4 09:01:30 CEST 2018
+
+moyenne = 1.07974s

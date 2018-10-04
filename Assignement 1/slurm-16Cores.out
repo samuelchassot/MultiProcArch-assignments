@@ -101,3 +101,5 @@ STARTING AT jeu oct 4 09:00:55 CEST 2018
 - Using 16 threads: pi = 3.14149096 computed in 0.1415s.
 - Using 16 threads: pi = 3.14149096 computed in 0.1375s.
 FINISHED AT jeu oct 4 09:01:10 CEST 2018
+
+moyenne = 0.144717172s
