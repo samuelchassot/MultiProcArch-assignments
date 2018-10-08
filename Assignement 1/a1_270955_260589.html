@@ -395,14 +395,13 @@ The serial part is initialisation. It consists of setting the number of threads 
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; samples; ++i) {
         <span class="hljs-keyword">double</span> x = next_rand(rand);
         <span class="hljs-keyword">double</span> y = next_rand(rand);
-        <span class="hljs-keyword">if</span> (x*x + y*y &lt;= <span class="hljs-number">1</span>){
-            <span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> omp atomic</span>
-            nb_points += <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> (x*x + y*y &lt; <span class="hljs-number">1</span>){
+            result[omp_get_thread_num()] += <span class="hljs-number">1</span>;
         }
     }
 </div></code></pre>
 <p>For each samples needed, we generate two random numbers, representing the X and Y coordinates of a points. If the distance between the point and the origin is less than 1, it is in the circle, and need to be added to nb_points. It has to be done in an atomic manner, to be sure that the value is indeed the number of points (avoid that two threads change it at the same time and loose the right value).<br>
-As every iteration of the loop is independent, it is possible to run it in a parallel manner. The dominant operation is the distance calculus, and it runs overall in O(samples).</p>
+As every iteration of the loop is independent, it is possible to run it in a parallel manner. The dominant operation is the distance computation, and it runs overall in O(samples).</p>
 <h2 id="integralc">integral.c</h2>
 <h3 id="algorithm-analysis">Algorithm analysis</h3>
 <p>The algorithm is very similar to <em>pi.c</em>, so it will not be detailed.<br>
