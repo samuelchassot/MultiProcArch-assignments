@@ -389,7 +389,7 @@ blockquote {
 <h2 id="pic">pi.c</h2>
 <h3 id="algorithm-analysis">Algorithm analysis</h3>
 <p>The algorithm runs in two main phases, one is serial and the other one is parallel.<br>
-The serial part is initialisation. It consists of setting the number of threads wanted, creating a random number generator, and preparing a variable for counting the points that will land inside the circle. This part is executed once, and run therefore in O(1).</p>
+The serial part is initialisation. It consists of setting the number of threads wanted, creating one random number generator per thread and put them in an array, and declaring and initializing an array of variables for counting the points that will land inside the circle (one per thread). This part is executed once, and run therefore in O(1).</p>
 <p>The parallel phase is the calculus phase and look like this :</p>
 <pre class="hljs"><code><div>    <span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> omp parallel for</span>
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &lt; samples; ++i) {
@@ -400,7 +400,7 @@ The serial part is initialisation. It consists of setting the number of threads 
         }
     }
 </div></code></pre>
-<p>For each samples needed, we generate two random numbers, representing the X and Y coordinates of a points. If the distance between the point and the origin is less than 1, it is in the circle, and need to be added to nb_points. It has to be done in an atomic manner, to be sure that the value is indeed the number of points (avoid that two threads change it at the same time and loose the right value).<br>
+<p>For each samples needed, we generate two random numbers, representing the X and Y coordinates of a points. If the distance between the point and the origin is less than 1, it is in the circle, and need to be added to result[omp_get_thread_num()]. Because each thread has its own variable in the array, there is no need to add an atomic condition.<br>
 As every iteration of the loop is independent, it is possible to run it in a parallel manner. The dominant operation is the distance computation, and it runs overall in O(samples).</p>
 <h2 id="integralc">integral.c</h2>
 <h3 id="algorithm-analysis">Algorithm analysis</h3>
@@ -409,6 +409,8 @@ The initialisation part run in constant time (O(1)), and the calculus part runs 
 <h2 id="parallelism">Parallelism</h2>
 <p>Roughly, 95% of each programm can be parallel, so a significant speedup is expected. Here is the graph of the expected speedup for 1, 2, 4, 8, 16, 32 and 64 cores.</p>
 <p><img src="Speedup.jpg" alt="Graph"></p>
+<p>Here is the effective speed up we obtain after running our code on the cluster with 1, 2, 4, 8 and 16 threads. For each number of thread we ran the program 100 times.</p>
+<p><img src="Effective-speedup.jpg" alt="Graph"></p>
 
 </body>
 </html>
