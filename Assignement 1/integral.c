@@ -42,19 +42,20 @@ int main (int argc, const char *argv[]) {
 double integrate (int num_threads, int samples, int a, int b, double (*f)(double)) {
     double integral;
     omp_set_num_threads(num_threads);
-    rand_gen rand = init_rand();
+    rand_gen rand[num_threads];
     double sum = 0;
     double* result[num_threads];
     int width = b - a;
 
-    #pragma omp parallel 
+    #pragma omp parallel
     {
         result[omp_get_thread_num()] = calloc(1, sizeof(double));
+	    rand[omp_get_thread_num()] = init_rand();
     }
 
     #pragma omp parallel for
     for (size_t i = 0; i < samples; ++i) {
-        double x = next_rand(rand);
+        double x = next_rand(rand[omp_get_thread_num()]);
         x = width * x + a;
         double y = (*f)(x);
         *result[omp_get_thread_num()] += y * width;
