@@ -6,9 +6,9 @@
 #SBATCH --mem 1G
 echo STARTING AT `date`
 
-./pi 1 100000000
-./pi 2 100000000
-./pi 4 100000000
-./pi 8 100000000
-./pi 16 100000000
+./integral 1 100000000 5 9
+./integral 2 100000000 5 9
+./integral 4 100000000 5 9
+./integral 8 100000000 5 9
+./integral 16 100000000 5 9
 echo FINISHED AT `date`

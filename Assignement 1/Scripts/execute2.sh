@@ -9,6 +9,6 @@ echo TEST WITH 2 CORES
 echo STARTING AT `date`
 
 for (( i = 0; i < 100; i++ )); do
-	./pi 2 100000000
+	./integral 2 200000000 5 9
 done
 echo FINISHED AT `date`
