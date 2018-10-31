@@ -58,7 +58,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
         output = temp;
     }
     
-    if(get_num_threads() < 3){
+    if(omp_get_num_threads() < 3){
         for(int i = 0 ; i < length/2 ; ++i){
             for(int j = 0 ; j < length/2 ; ++j){
                 double cur = OUTPUT(i, j);
