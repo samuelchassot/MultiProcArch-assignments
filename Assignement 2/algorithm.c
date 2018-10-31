@@ -19,11 +19,12 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     double *temp;
     double midIndex = length / 2 - 1;
 
-    double *pInput = calloc(8*length, sizeof(double));
-    double *pOutput = calloc(8*length, sizeof(double));
+    double *pInput = calloc(8*length*length, sizeof(double));
+    double *pOutput = calloc(8*length*length, sizeof(double));
     for(int i=1; i<length / 2; i++) {
         for(int j=1; j<length / 2; j++) {
-            PINPUT(i,j) = INPUT(i,j)
+            PINPUT(i,j) = INPUT(i,j);
+            POUTPUT(i,j) = OUTPUT(i,j);
         }
     }
 
@@ -64,50 +65,26 @@ void simulate(double *input, double *output, int threads, int length, int iterat
             }
         }
 
-        temp = pInput;
-        pInput = pOutput;
-        pOutput = temp;
+        if (n != iterations -1){
+                temp = pInput;
+                pInput = pOutput;
+                pOutput = temp;
+            }    
     }
 
     for(int i=1; i<length / 2; i++) {
         for(int j=1; j<length / 2; j++) {
-            OUTPUT(i,j) = POUTPUT(i,j)
+            OUTPUT(i,j) = POUTPUT(i,j);
         }
     }
 
     
-    if(omp_get_num_threads() < 3){
-        for(int i = 0 ; i < length/2 ; ++i){
-            for(int j = 0 ; j < length/2 ; ++j){
-                double cur = OUTPUT(i, j);
-                OUTPUT(length-1-i, j) = cur;
-                OUTPUT(i, length-1-j) = cur;
-                OUTPUT(length-1-i, length-1-j) = cur;
-            }
-        }
-    }
-    else{
-        if(omp_get_thread_num() == 0){
-            for(int i = 0 ; i < length/2 ; ++i){
-                for(int j = 0 ; j < length/2 ; ++j){
-                    OUTPUT(length-1-i, j) = OUTPUT(i, j);
-                }
-            }
-        }
-        if(omp_get_thread_num() == 1){
-            for(int i = 0 ; i < length/2 ; ++i){
-                for(int j = 0 ; j < length/2 ; ++j){
-                    OUTPUT(i, length-1-j) = OUTPUT(i, j);
-                }
-            }
-        }
-
-        if(omp_get_thread_num() == 2){
-            for(int i = 0 ; i < length/2 ; ++i){
-                for(int j = 0 ; j < length/2 ; ++j){
-                    OUTPUT(length-1-i, length-1-j) = OUTPUT(i, j);
-                }
-            }
+    for(int i = 0 ; i < length/2 ; ++i){
+        for(int j = 0 ; j < length/2 ; ++j){
+            double cur = OUTPUT(i, j);
+            OUTPUT(length-1-i, j) = cur;
+            OUTPUT(i, length-1-j) = cur;
+            OUTPUT(length-1-i, length-1-j) = cur;
         }
     }
 
