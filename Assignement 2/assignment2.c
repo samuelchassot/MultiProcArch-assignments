@@ -33,9 +33,6 @@ int main (int argc, const char *argv[]) {
     //Allocate a two-dimensional array
     double *input  = malloc(sizeof(double)*length*length);
     double *output = malloc(sizeof(double)*length*length);
-
-    fprintf(stderr, "Input %p\n",input );
-    fprintf(stderr, "output %p\n",output );
     //Initialize the array
     init(input, length);
     init(output, length);
@@ -55,7 +52,6 @@ int main (int argc, const char *argv[]) {
     //Save array in filelength
 
     
-    fprintf(stderr, "output %p\n",output );
     save(output, length, argv[4]);
     
     //Free allocated memory
