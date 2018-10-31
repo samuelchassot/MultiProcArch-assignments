@@ -18,8 +18,10 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     // Parallelize this!!
     for(int n=0; n < iterations; n++)
     {
+        #pragma omp parallel for
         for(int i=1; i<length / 2; i++)
         {
+            #pragma omp parallel for
             for(int j=1; j<length / 2; j++)
             {
                     if ( (i == length/2-1)
