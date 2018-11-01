@@ -32,9 +32,9 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     // Parallelize this!!
     for(int n=0; n < iterations; n++) {
 
-        #pragma omp parallel for
+        //#pragma omp parallel for
         for(int i=1; i<length / 2; i++) {
-            #pragma omp parallel for
+            //#pragma omp parallel for
 
             for(int j=1; j<length / 2; j++) {
 
@@ -58,7 +58,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
 	                                   PINPUT(i+1,j-1) + PINPUT(i+1,j) + PINPUT(i+1,j+1) )/9;                    	
                     }
 
-                    POUTPUT(i,j) = temp2;
+                     POUTPUT(i,j) = temp2;
 
 
 
@@ -72,19 +72,15 @@ void simulate(double *input, double *output, int threads, int length, int iterat
             }    
     }
 
-    for(int i=1; i<length / 2; i++) {
-        for(int j=1; j<length / 2; j++) {
-            OUTPUT(i,j) = POUTPUT(i,j);
-        }
-    }
 
     
     for(int i = 0 ; i < length/2 ; ++i){
         for(int j = 0 ; j < length/2 ; ++j){
-            double cur = OUTPUT(i, j);
-            OUTPUT(length-1-i, j) = cur;
-            OUTPUT(i, length-1-j) = cur;
-            OUTPUT(length-1-i, length-1-j) = cur;
+            double cur = POUTPUT(i, j);
+            //OUTPUT(i,j) = cur;
+            //OUTPUT(length-1-i, j) = cur;
+            //OUTPUT(i, length-1-j) = cur;
+            //OUTPUT(length-1-i, length-1-j) = cur;
         }
     }
 
