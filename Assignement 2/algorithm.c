@@ -11,22 +11,19 @@ SCIPER      : 270955 - 260589
 #define INPUT(I,J) input[(I)*length+(J)]
 #define OUTPUT(I,J) output[(I)*length+(J)]
 
-#define PINPUT(I,J) pInput[8*((I)*length+(J))]
-#define POUTPUT(I,J) pOutput[8*((I)*length+(J))]
+#define PINPUT(I,J) pInput[4*((I)*length+(J))]
+#define POUTPUT(I,J) pOutput[4*((I)*length+(J))]
 
 
 void simulate(double *input, double *output, int threads, int length, int iterations) {
     double *temp;
-    double midIndex = length / 2 - 1;
+    size_t midIndex = length / 2 - 1;
 
-    double *pInput = calloc(2*length*length, sizeof(double));
-    double *pOutput = calloc(2*length*length, sizeof(double));
-    for(int i=1; i<length / 2; i++) {
-        for(int j=1; j<length / 2; j++) {
-            PINPUT(i,j) = INPUT(i,j);
-            POUTPUT(i,j) = OUTPUT(i,j);
-        }
-    }
+    double *pInput =  calloc(length*length, sizeof(double));
+    double *pOutput = calloc(length*length, sizeof(double));
+    
+    PINPUT(midIndex, midIndex) = INPUT(midIndex, midIndex);
+    POUTPUT(midIndex, midIndex) = OUTPUT(midIndex, midIndex);
 
     
     // Parallelize this!!
@@ -78,7 +75,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     }
 
 
-    
+    #pragma omp parallel for
     for(int i = 0 ; i < length/2 ; ++i){
         for(int j = 0 ; j < length/2 ; ++j){
             double cur = POUTPUT(i, j);
@@ -88,6 +85,8 @@ void simulate(double *input, double *output, int threads, int length, int iterat
             OUTPUT(length-1-i, length-1-j) = cur;
         }
     }
+    free(pInput);
+    free(pOutput);
 
     
 }
