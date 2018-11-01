@@ -19,8 +19,8 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     double *temp;
     double midIndex = length / 2 - 1;
 
-    double *pInput = calloc(8*length*length, sizeof(double));
-    double *pOutput = calloc(8*length*length, sizeof(double));
+    double *pInput = calloc(2*length*length, sizeof(double));
+    double *pOutput = calloc(2*length*length, sizeof(double));
     for(int i=1; i<length / 2; i++) {
         for(int j=1; j<length / 2; j++) {
             PINPUT(i,j) = INPUT(i,j);
@@ -82,10 +82,10 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     for(int i = 0 ; i < length/2 ; ++i){
         for(int j = 0 ; j < length/2 ; ++j){
             double cur = POUTPUT(i, j);
-            //OUTPUT(i,j) = cur;
-            //OUTPUT(length-1-i, j) = cur;
-            //OUTPUT(i, length-1-j) = cur;
-            //OUTPUT(length-1-i, length-1-j) = cur;
+            OUTPUT(i,j) = cur;
+            OUTPUT(length-1-i, j) = cur;
+            OUTPUT(i, length-1-j) = cur;
+            OUTPUT(length-1-i, length-1-j) = cur;
         }
     }
 
