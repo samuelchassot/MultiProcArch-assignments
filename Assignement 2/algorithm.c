@@ -11,11 +11,20 @@ SCIPER      : 270955 - 260589
 #define INPUT(I,J) input[(I)*length+(J)]
 #define OUTPUT(I,J) output[(I)*length+(J)]
 
+#define PINPUT(I,J) pInput[4*((I)*length+(J))]
+#define POUTPUT(I,J) pOutput[4*((I)*length+(J))]
 
 
 void simulate(double *input, double *output, int threads, int length, int iterations) {
     double *temp;
-    double midIndex = length / 2 - 1;
+    size_t midIndex = length / 2 - 1;
+
+    double *pInput =  calloc(length*length, sizeof(double));
+    double *pOutput = calloc(length*length, sizeof(double));
+    
+    PINPUT(midIndex, midIndex) = INPUT(midIndex, midIndex);
+    POUTPUT(midIndex, midIndex) = OUTPUT(midIndex, midIndex);
+
     
     for(int n=0; n < iterations; n++) {
 
@@ -63,11 +72,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     }
 
 
-    temp = input;
-    input = output;
-    output = temp;
-
-    
+    #pragma omp parallel for
     for(int i = 0 ; i < length/2 ; ++i){
         for(int j = 0 ; j < length/2 ; ++j){
             double cur = OUTPUT(i, j);
@@ -77,6 +82,8 @@ void simulate(double *input, double *output, int threads, int length, int iterat
             OUTPUT(length-1-i, length-1-j) = cur;
         }
     }
+    free(pInput);
+    free(pOutput);
 
 
     
