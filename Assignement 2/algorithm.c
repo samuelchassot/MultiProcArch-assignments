@@ -11,19 +11,11 @@ SCIPER      : 270955 - 260589
 #define INPUT(I,J) input[(I)*length+(J)]
 #define OUTPUT(I,J) output[(I)*length+(J)]
 
-#define PINPUT(I,J) pInput[4*((I)*length+(J))]
-#define POUTPUT(I,J) pOutput[4*((I)*length+(J))]
 
 
 void simulate(double *input, double *output, int threads, int length, int iterations) {
     double *temp;
     size_t midIndex = length / 2 - 1;
-
-    double *pInput =  calloc(length*length, sizeof(double));
-    double *pOutput = calloc(length*length, sizeof(double));
-    
-    PINPUT(midIndex, midIndex) = INPUT(midIndex, midIndex);
-    POUTPUT(midIndex, midIndex) = OUTPUT(midIndex, midIndex);
 
     
     for(int n=0; n < iterations; n++) {
@@ -88,33 +80,30 @@ void simulate(double *input, double *output, int threads, int length, int iterat
         output = temp;   
     }
 
-    //output = input;
-    //temp = input;
-    //output = temp;
-
-    #pragma omp parallel for
-    for(int i = 0 ; i < length/2 ; ++i){
-        for(int j = i ; j < length/2 ; ++j){
-            if ( (i == midIndex) && (j == midIndex)){
-            	continue;
-            }	
-            double cur = OUTPUT(i, j);
-
-            OUTPUT(i,j) = cur;
-            OUTPUT(j,i) = cur;
-
-            OUTPUT(length-1-i, j) = cur;
-            OUTPUT(j, length-1-i) = cur;
-
-            OUTPUT(i, length-1-j) = cur;
-            OUTPUT(length-1-j, i) = cur;
-
-            OUTPUT(length-1-i, length-1-j) = cur;
-            OUTPUT(length-1-j, length-1-i) = cur;
-        }
+    if (iterations % 2 == 1){
+    	output = input;
     }
-    free(pInput);
-    free(pOutput);
+	    #pragma omp parallel for
+	    for(int i = 0 ; i < length/2 ; ++i){
+	        for(int j = i ; j < length/2 ; ++j){
+	            if ( (i == midIndex) && (j == midIndex)){
+	            	continue;
+	            }	
+	            double cur = OUTPUT(i, j);
+
+	            OUTPUT(i,j) = cur;
+	            OUTPUT(j,i) = cur;
+
+	            OUTPUT(length-1-i, j) = cur;
+	            OUTPUT(j, length-1-i) = cur;
+
+	            OUTPUT(i, length-1-j) = cur;
+	            OUTPUT(length-1-j, i) = cur;
+
+	            OUTPUT(length-1-i, length-1-j) = cur;
+	            OUTPUT(length-1-j, length-1-i) = cur;
+	        }
+	    }
 
 
     
