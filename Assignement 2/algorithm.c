@@ -74,7 +74,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
 	            }
 	        }
 
-    	//}
+    	}
 
         temp = input;
         input = output;
