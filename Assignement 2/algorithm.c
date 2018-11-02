@@ -74,7 +74,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
 	            }
 	        }
 
-    	}
+    	//}
 
         temp = input;
         input = output;
@@ -84,7 +84,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
     if (iterations % 2 == 1){
     	output = input;
     }
-	    #pragma omp parallel for
+	    //#pragma omp parallel for
 	    for(int i = 0 ; i < length/2 ; ++i){
 	        for(int j = i ; j < length/2 ; ++j){
 	            if ( (i == midIndex) && (j == midIndex)){
