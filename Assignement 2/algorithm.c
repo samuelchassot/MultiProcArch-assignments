@@ -16,6 +16,7 @@ SCIPER      : 270955 - 260589
 void simulate(double *input, double *output, int threads, int length, int iterations) {
     double *temp;
     size_t midIndex = length / 2 - 1;
+    omp_set_num_threads(threads);
 
     
     for(int n=0; n < iterations; n++) {
