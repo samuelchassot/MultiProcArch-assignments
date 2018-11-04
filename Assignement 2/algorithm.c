@@ -25,7 +25,7 @@ void simulate(double *input, double *output, int threads, int length, int iterat
         {
 
     		#pragma omp for
-	        for(int i=1; i<length / 2; i++) {
+	        for(int i=max(1, midIndex - n - 1); i<length / 2; i++) {
 	            
 	            
 	            for(int j=i; j<length / 2; j++) {
