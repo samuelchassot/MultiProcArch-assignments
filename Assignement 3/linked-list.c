@@ -26,7 +26,7 @@ int insert(node_t *head, int val) {
     new_node = malloc(sizeof(node_t));
     new_node->val = val;
     new_node->next = current;
-    new_node->to_remove = 0
+    new_node->to_remove = 0;
 
     previous->next = new_node;
     return 0;
