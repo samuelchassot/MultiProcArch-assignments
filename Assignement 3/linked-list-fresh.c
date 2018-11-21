@@ -24,16 +24,22 @@ int insert(node_t *head, int val) {
     
     // Here is the right position to insert the new node.
 
-    
+    int flag = 0;
     if(previous->next == current && !(current->lock) && !(previous->lock)){
         #pragma omp atomic{
-            omp_set_lock(&current->lock);
-            omp_set_lock(&previous->lock);
+            if(previous->next == current && !(current->lock) && !(previous->lock)){
+                omp_set_lock(&current->lock);
+                omp_set_lock(&previous->lock);
+            }else {
+                flag = 1;
+            }
         }
     } else {
-        insert(head, val);
+        flag = 1;
     }
-    
+    if(flag){
+        return insert(head, val);
+    }
     node_t *new_node;
     new_node = malloc(sizeof(node_t));
     new_node->val = val;
