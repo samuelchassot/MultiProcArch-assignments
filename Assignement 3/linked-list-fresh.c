@@ -62,8 +62,10 @@ int delete(node_t *head, int val) {
     current = head->next;
     while (current) {
         if (current->val == val) {
-            previous->next = current->next;
-            current->to_remove = 1; // Another system component will free this node later
+            #pragma omp atomic{
+                previous->next = current->next;
+                current->to_remove = 1; // Another system component will free this node later
+            }
             return val;
         }
 
