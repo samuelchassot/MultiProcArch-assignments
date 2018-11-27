@@ -1,6 +1,6 @@
 
 NVCC = nvcc
-CFLAGS = -Wno-deprecated-gpu-targets -c -O3
+CFLAGS = -Wno-deprecated-gpu-targets -c -O3 -D_FORCE_INLINES
 LFLAGS = -Wno-deprecated-gpu-targets -lcudart -lcuda
 
 all: assignment4.o implementation.o
