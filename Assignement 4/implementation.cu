@@ -1,8 +1,8 @@
 /*
 ============================================================================
 Filename    : algorithm.c
-Author      : Your name goes here
-SCIPER      : Your SCIPER number
+Author      : Samuel Chassot and Simon Wicky
+SCIPER      : 270955, 260589
 ============================================================================
 */
 
