@@ -50,10 +50,8 @@ void array_process(double *input, double *output, int length, int iterations)
 }
 
 __global__ void array_process_GPU(double *input, double *output, int length){
-    //int x = blockIdx.x;
-    //int y = threadIdx.x;
-    int x = 22;
-    int y = 20;
+    int x = blockIdx.x;
+    int y = threadIdx.x;
         OUTPUT(0,0) = x;
         OUTPUT(0,1) = y;
     if(y > 0 && y < length - 1 && x > 0 && x < length - 1 ){
@@ -115,9 +113,9 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     /* GPU calculation goes here */
     for(int n=0; n < iterations; n++) {
     	array_process_GPU <<<length-2,length-2>>> (input_GPU, output_GPU, length);
-        temp = input;
-        input = output;
-        output = temp;
+        temp = input_GPU;
+        input_GPU = output_GPU;
+        output_GPU = temp;
     }
 
 
@@ -128,8 +126,8 @@ void GPU_array_process(double *input, double *output, int length, int iterations
 
 
     /* Copying array from device to host goes here */
-    if (iterations %2 == 0) {
-        cudaMemcpy(output, output_GPU, size, cudaMemcpyDeviceToHost);
+    if (iterations % 2 == 0) {
+        cudaMemcpy(output, input_GPU, size, cudaMemcpyDeviceToHost);
     } else {
         cudaMemcpy(output, output_GPU, size, cudaMemcpyDeviceToHost);
     }
