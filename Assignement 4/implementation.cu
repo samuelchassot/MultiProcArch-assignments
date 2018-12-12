@@ -129,7 +129,7 @@ void GPU_array_process(double *input, double *output, int length, int iterations
 
     /* Copying array from device to host goes here */
     if (iterations %2 == 0) {
-        cudaMemcpy(output, input_GPU, size, cudaMemcpyDeviceToHost);
+        cudaMemcpy(output, output_GPU, size, cudaMemcpyDeviceToHost);
     } else {
         cudaMemcpy(output, output_GPU, size, cudaMemcpyDeviceToHost);
     }
