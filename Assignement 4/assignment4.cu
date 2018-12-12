@@ -38,6 +38,7 @@ int main (int argc, const char *argv[]) {
     //Allocate arrays
     double *input   = new double[length*length];
     double *output  = new double[length*length];
+    cout<<"HERE"
 
     //Reset Device
     cudaDeviceReset();
