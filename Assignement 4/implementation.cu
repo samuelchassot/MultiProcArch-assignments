@@ -139,6 +139,8 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     cudaEventSynchronize(cpy_D2H_end);
 
     /* Postprocessing goes here */
+    cudaFree(&input_GPU);
+    cudaFree(&output_GPU);
 
 
 
