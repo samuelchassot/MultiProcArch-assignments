@@ -50,7 +50,7 @@ void array_process(double *input, double *output, int length, int iterations)
 }
 
 __global__ void array_process_GPU(double *input, double *output, int length){
-    double *temp;
+    //double *temp;
     int x = (blockIdx.x * blockDim.x) + threadIdx.x;
     int y = (blockIdx.y * blockDim.y) + threadIdx.y;
     if(y > 0 && y < length-1 && x > 0 && x < length - 1 ){
@@ -68,8 +68,9 @@ __global__ void array_process_GPU(double *input, double *output, int length){
     	OUTPUT(x,y) = 1000;
     }
     INPUT(x,y) = 1000;
+    OUTPUT(x,y) = 1000;
 
-    temp = input;
+    //temp = input;
     //input = output;
     //output = temp;
 }
