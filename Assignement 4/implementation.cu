@@ -50,9 +50,8 @@ void array_process(double *input, double *output, int length, int iterations)
 }
 
 __global__ void array_process_GPU(double *input, double *output, int length){
-    int x = (blockIdx.x * blockDim.x) + threadIdx.x;
-    int y = (blockIdx.y * blockDim.y) + threadIdx.y;
-    if(y > 0 && y < length - 1 && x > 0 && x < length - 1 ){
+    int x = blockIdx.x + 1;
+    int y = threadIdx.x + 1;    
         OUTPUT(x,y) = (INPUT(x-1,y-1) +
                             INPUT(x-1,y)   +
                             INPUT(x-1,y+1) +
@@ -62,7 +61,6 @@ __global__ void array_process_GPU(double *input, double *output, int length){
                             INPUT(x+1,y-1) +
                             INPUT(x+1,y)   +
                             INPUT(x+1,y+1) ) / 9;
-    }
     if ((x == length / 2 || x == length / 2 - 1) &&  (y == length / 2 || y == length / 2 - 1)){
     	OUTPUT(x,y) = 1000;
     }
@@ -109,10 +107,8 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     cudaEventSynchronize(cpy_H2D_end);
 
     //Copy array from host to device
-    int blkSize = 25;
-    int blkDim = length / blkSize;	
-    dim3 thrsPerBlock(blkSize,blkSize);
-    dim3 nBlks(blkDim,blkDim);
+    dim3 thrsPerBlock(length - 2, 1);
+    dim3 nBlks(length - 2, 1);
 
     cudaEventRecord(comp_start);
     /* GPU calculation goes here */
