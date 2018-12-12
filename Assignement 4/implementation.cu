@@ -89,8 +89,14 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     double* temp;
     int size = length * length * sizeof(double);
 
-    cudaMalloc((void**) &input_GPU, size);
-    cudaMalloc((void**) &output_GPU, size);
+    if (cudaMalloc((void**) &input_GPU, size) != cudeSuccess){
+        printf("Couldn't allocate memory for input\n");
+        return;
+    }
+    if (cudaMalloc((void**) &output_GPU, size) != cudeSuccess){
+        printf("Couldn't allocate memory for output\n");
+        return;
+    }
 
     cudaEventRecord(cpy_H2D_start);
 
