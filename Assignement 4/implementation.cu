@@ -50,9 +50,10 @@ void array_process(double *input, double *output, int length, int iterations)
 }
 
 __global__ void array_process_GPU(double *input, double *output, int length){
-    //double *temp;
-    int x = (blockIdx.x * blockDim.x) + threadIdx.x;
-    int y = (blockIdx.y * blockDim.y) + threadIdx.y;
+    //int x = (blockIdx.x * blockDim.x) + threadIdx.x;
+    //int y = (blockIdx.y * blockDim.y) + threadIdx.y;
+    int x = 10;
+    int y = 10;
     if(y > 0 && y < length-1 && x > 0 && x < length - 1 ){
         OUTPUT(x,y) = (INPUT(x-1,y-1) +
                             INPUT(x-1,y)   +
@@ -70,9 +71,7 @@ __global__ void array_process_GPU(double *input, double *output, int length){
     INPUT(x,y) = 1000;
     OUTPUT(x,y) = 1000;
 
-    //temp = input;
-    //input = output;
-    //output = temp;
+
 }
 
 
@@ -91,7 +90,9 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     /* Preprocessing goes here */
     double* input_GPU;
     double* output_GPU;
-    int size = length * length;
+    double* temp;
+    int size = length * length * sizeof(double);
+
     cudaMalloc((void**) &input_GPU, size);
     cudaMalloc((void**) &output_GPU, size);
 
@@ -101,6 +102,7 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     /* Copying array from host to device goes here */
 
     cudaMemcpy(input_GPU, input, size, cudaMemcpyHostToDevice);
+
     cudaEventRecord(cpy_H2D_end);
     cudaEventSynchronize(cpy_H2D_end);
 
@@ -110,7 +112,10 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     cudaEventRecord(comp_start);
     /* GPU calculation goes here */
     for(int n=0; n < iterations; n++) {
-    	array_process_GPU <<<100,100>>> (input_GPU, output_GPU, length);
+    	array_process_GPU <<<length-2,length-2>>> (input_GPU, output_GPU, length);
+        temp = input;
+        input = output;
+        output = temp;
     }
 
 
@@ -121,7 +126,11 @@ void GPU_array_process(double *input, double *output, int length, int iterations
 
 
     /* Copying array from device to host goes here */
-    cudaMemcpy(output_GPU, output, size, cudaMemcpyDeviceToHost);
+    if (iterations %2 == 0) {
+        cudaMemcpy(output, input_GPU, size, cudaMemcpyDeviceToHost);
+    } else {
+        cudaMemcpy(output, output_GPU, size, cudaMemcpyDeviceToHost);
+    }
 
     cudaEventRecord(cpy_D2H_end);
     cudaEventSynchronize(cpy_D2H_end);
