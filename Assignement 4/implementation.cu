@@ -61,7 +61,7 @@ __global__ void array_process_GPU(double *input, double *output, int length){
                             INPUT(x,y)     +
                             INPUT(x,y+1)   +
                             INPUT(x+1,y-1) +
-                            INPUT(x+1,y)]  +
+                            INPUT(x+1,y)   +
                             INPUT(x+1,y+1) ) / 9;
     }
     if ((x == length / 2 || x == length / 2 - 1) &&  (y == length / 2 || y == length / 2 - 1)){
