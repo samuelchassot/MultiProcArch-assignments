@@ -68,6 +68,7 @@ __global__ void array_process_GPU(double *input, double *output, int length){
     if ((x == length / 2 || x == length / 2 - 1) &&  (y == length / 2 || y == length / 2 - 1)){
     	OUTPUT(x,y) = 1000;
     }
+    OUTPUT(10,10) = 1000;
 
 
 }
