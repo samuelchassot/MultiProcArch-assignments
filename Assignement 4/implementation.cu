@@ -12,8 +12,8 @@ SCIPER      : 270955, 260589
 #include <cuda_runtime.h>
 using namespace std;
 
-#define INPUT[(X,Y)] input[(X) * length + (Y)]
-#define OUTPUT[(X,Y)] output[(X) * length + (Y)] 
+#define INPUT(X,Y) input[(X) * length + (Y)]
+#define OUTPUT(X,Y) output[(X) * length + (Y)] 
 
 // CPU Baseline
 void array_process(double *input, double *output, int length, int iterations)
@@ -54,18 +54,18 @@ __global__ void array_process_GPU(double *input, double *output, int length){
     int x = 10;
     int y = 10;
     if(y > 0 && y < length-1 && x > 0 && x < length - 1 ){
-        output[(x,y)] = (input[(x-1,y-1)] +
-                            input[(x-1,y)]   +
-                            input[(x-1,y+1)] +
-                            input[(x,y-1)]   +
-                            input[(x,y)]     +
-                            input[(x,y+1)]   +
-                            input[(x+1,y-1)] +
-                            input[(x+1,y)]   +
-                            input[(x+1,y+1)] ) / 9;
+        OUTPUT(x,y) = (INPUT(x-1,y-1) +
+                            INPUT(x-1,y)   +
+                            INPUT(x-1,y+1) +
+                            INPUT(x,y-1)   +
+                            INPUT(x,y)     +
+                            INPUT(x,y+1)   +
+                            INPUT(x+1,y-1) +
+                            INPUT(x+1,y)]  +
+                            INPUT(x+1,y+1) ) / 9;
     }
     if ((x == length / 2 || x == length / 2 - 1) &&  (y == length / 2 || y == length / 2 - 1)){
-    	output[(x,y)] = 1000;
+    	OUTPUT(x,y) = 1000;
     }
     temp = input;
     input = output;
