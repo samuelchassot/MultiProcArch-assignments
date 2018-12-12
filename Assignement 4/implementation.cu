@@ -90,11 +90,11 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     int size = length * length * sizeof(double);
 
     if (cudaMalloc((void**) &input_GPU, size) != cudaSuccess){
-        printf("Couldn't allocate memory for input\n");
+        cout<<"Couldn't alloc mem for in";
         return;
     }
     if (cudaMalloc((void**) &output_GPU, size) != cudaSuccess){
-        printf("Couldn't allocate memory for output\n");
+        cout<<"Couldn't alloc mem for out";
         return;
     }
 
