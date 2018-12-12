@@ -12,6 +12,9 @@ SCIPER      : 270955, 260589
 #include <cuda_runtime.h>
 using namespace std;
 
+#define INPUT[(X,Y)] input[(X) * length + (Y)]
+#define OUTPUT[(X,Y)] output[(X) * length + (Y)] 
+
 // CPU Baseline
 void array_process(double *input, double *output, int length, int iterations)
 {
@@ -46,36 +49,27 @@ void array_process(double *input, double *output, int length, int iterations)
     }
 }
 
-__global__ void array_process_GPU(double *input, double *output, int length, int iterations){
+__global__ void array_process_GPU(double *input, double *output, int length){
     double *temp;
-
-    for(int n=0; n<(int) iterations; n++)
-    {
-        for(int i=1; i<length-1; i++)
-        {
-            for(int j=1; j<length-1; j++)
-            {
-                output[(i)*(length)+(j)] = (input[(i-1)*(length)+(j-1)] +
-                                            input[(i-1)*(length)+(j)]   +
-                                            input[(i-1)*(length)+(j+1)] +
-                                            input[(i)*(length)+(j-1)]   +
-                                            input[(i)*(length)+(j)]     +
-                                            input[(i)*(length)+(j+1)]   +
-                                            input[(i+1)*(length)+(j-1)] +
-                                            input[(i+1)*(length)+(j)]   +
-                                            input[(i+1)*(length)+(j+1)] ) / 9;
-
-            }
-        }
-        output[(length/2-1)*length+(length/2-1)] = 1000;
-        output[(length/2)*length+(length/2-1)]   = 1000;
-        output[(length/2-1)*length+(length/2)]   = 1000;
-        output[(length/2)*length+(length/2)]     = 1000;
-
-        temp = input;
-        input = output;
-        output = temp;
+    int x = 10;
+    int y = 10;
+    if(y > 0 && y < length-1 && x > 0 && x < length - 1 ){
+        output[(x,y)] = (input[(x-1,y-1)] +
+                            input[(x-1,y)]   +
+                            input[(x-1,y+1)] +
+                            input[(x,y-1)]   +
+                            input[(x,y)]     +
+                            input[(x,y+1)]   +
+                            input[(x+1,y-1)] +
+                            input[(x+1,y)]   +
+                            input[(x+1,y+1)] ) / 9;
     }
+    if ((x == length / 2 || x == length / 2 - 1) &&  (y == length / 2 || y == length / 2 - 1)){
+    	output[(x,y)] = 1000;
+    }
+    temp = input;
+    input = output;
+    output = temp;
 }
 
 
@@ -112,7 +106,9 @@ void GPU_array_process(double *input, double *output, int length, int iterations
 
     cudaEventRecord(comp_start);
     /* GPU calculation goes here */
-    array_process_GPU <<< 32,128 >>> (input_GPU, output_GPU, length, iterations);
+    for(int n=0; n<(int) iterations; n++) {
+    	array_process_GPU <<< 32,128 >>> (input_GPU, output_GPU, length);
+    }
 
 
     cudaEventRecord(comp_end);
