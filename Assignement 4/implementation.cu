@@ -105,14 +105,14 @@ void GPU_array_process(double *input, double *output, int length, int iterations
 
     /* Copying array from host to device goes here */
 
+    //Copy array from host to device
     cudaMemcpy(input_GPU, input, size, cudaMemcpyHostToDevice);
 
     cudaEventRecord(cpy_H2D_end);
     cudaEventSynchronize(cpy_H2D_end);
 
-    //Copy array from host to device
-    dim3 thrsPerBlock(length / 2 -1, 1);
-    dim3 nBlks(length /2 -1, 1);
+    dim3 thrsPerBlock(length / 2 - 1, 1);
+    dim3 nBlks(length /2 - 1, 1);
 
     cudaEventRecord(comp_start);
     /* GPU calculation goes here */
