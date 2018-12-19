@@ -64,6 +64,10 @@ __global__ void array_process_GPU(double *input, double *output, int length){
     if ((x == length / 2 || x == length / 2 - 1) &&  (y == length / 2 || y == length / 2 - 1)){
     	OUTPUT(x,y) = 1000;
     }
+	
+	OUTPUT(length-1-x, y) = OUTPUT(x,y);
+	OUTPUT(x, length-1-y) = OUTPUT(x,y);
+	OUTPUT(length-1-x, length-1-y) = OUTPUT(x,y);
 
 
 }
@@ -107,8 +111,8 @@ void GPU_array_process(double *input, double *output, int length, int iterations
     cudaEventSynchronize(cpy_H2D_end);
 
     //Copy array from host to device
-    dim3 thrsPerBlock(length - 2, 1);
-    dim3 nBlks(length - 2, 1);
+    dim3 thrsPerBlock(length / 2 -1, 1);
+    dim3 nBlks(length /2 -1, 1);
 
     cudaEventRecord(comp_start);
     /* GPU calculation goes here */
