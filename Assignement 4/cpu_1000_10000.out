@@ -1,0 +1,4 @@
+STARTING AT Wed 19 Dec 15:01:34 CET 2018
+nvcc -Wno-deprecated-gpu-targets -lcudart -lcuda assignment4.o implementation.o -o assignment4
+Running the algorithm on 1000 by 1000 array for 10000 iteration takes 21.68s
+FINISHED at Wed 19 Dec 15:01:59 CET 2018
