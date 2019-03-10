@@ -1,6 +1,6 @@
 # MultiProcArch-assignments
 
-Project done during the "Multiprocessor architecture" course in fifth semester at EPFL.
+Project done during the "Multiprocessor architecture" course given during fifth semester at EPFL (Computer science).
 
 ## Contributors
 
