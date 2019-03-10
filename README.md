@@ -5,4 +5,5 @@ Project done during the "Multiprocessor architecture" course in fifth semester a
 ## Contributors
 
 Simon Wicky
+
 Samuel Chassot
